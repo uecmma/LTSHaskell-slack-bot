@@ -7,7 +7,7 @@ module Bot.Slack
   , SlackPostData (..)
   , SlackConfig (..)
   , postToSlack
-  , sendMessage
+  , sendSlackMessage
   ) where
 
 import           Control.Monad
@@ -61,5 +61,5 @@ postToSlack c d = runResourceT $ do
   res <- httpLbs req manager
   return $ responseBody res
 
-sendMessage :: MonadIO m => SlackConfig -> SlackPostInfo -> SlackMessage -> m ()
-sendMessage c i m = void $ liftIO $ postToSlack c $ SlackPostData i m
+sendSlackMessage :: MonadIO m => SlackConfig -> SlackPostInfo -> SlackMessage -> m ()
+sendSlackMessage c i m = void $ liftIO $ postToSlack c $ SlackPostData i m

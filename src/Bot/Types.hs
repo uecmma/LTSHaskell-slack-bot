@@ -4,6 +4,7 @@
 module Bot.Types
   ( LtsVersion (..)
   , Snapshots (..)
+  , NightlyHaskellUpdate (..)
   , LtsHaskellUpdate (..)
   , LtsHaskellUpdates (..)
   , isLatestUpdate
@@ -102,8 +103,8 @@ instance Show NightlyHaskellUpdate where
     = "nightly-" ++ show b ++ " -> nightly-" ++ show a
 
 data LtsHaskellUpdate = LtsHaskellUpdate
-  { getBeforeVersion :: LtsVersion
-  , getAfterVersion  :: LtsVersion
+  { getBeforeLtsVersion :: LtsVersion
+  , getAfterLtsVersion  :: LtsVersion
   } deriving (Eq)
 
 instance Show LtsHaskellUpdate where
