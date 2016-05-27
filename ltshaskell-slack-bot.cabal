@@ -1,0 +1,55 @@
+name:                ltshaskell-slack-bot
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            https://github.com/uecmma/ltshaskell-slack-bot#readme
+license:             MIT
+license-file:        LICENSE
+author:              MMA
+maintainer:          developer@mma.club.uec.ac.jp
+copyright:           MMA
+category:            Sample
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+                       Bot.Config
+                       Bot.Types
+                       Bot.Run
+  build-depends:       base >= 4.7 && < 5
+                     , aeson
+                     , mtl
+                     , bytestring
+                     , text
+                     , conduit
+                     , http-conduit
+                     , monad-logger
+                     , path
+                     , optparse-applicative
+                     , cron
+                     , stm
+  default-language:    Haskell2010
+
+executable ltshaskell-slackbot
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ltshaskell-slack-bot
+  default-language:    Haskell2010
+
+test-suite ltshaskell-slack-bot-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , ltshaskell-slack-bot
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/mizunashi-mana/ltshaskell-slack-bot
