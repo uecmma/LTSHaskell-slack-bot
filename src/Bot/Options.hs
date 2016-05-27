@@ -14,7 +14,10 @@ data BotOptions = BotOptions {
 
 botOptionsParser :: Parser BotOptions
 botOptionsParser = BotOptions
-  <$> argument str (metavar "URL")
+  <$> option str (
+        long "webhook_url"
+     <> metavar "URL"
+     <> help "Webhook URL")
 
 allBotInfo :: ParserInfo BotOptions
 allBotInfo = info
