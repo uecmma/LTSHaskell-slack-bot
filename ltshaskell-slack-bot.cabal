@@ -19,6 +19,7 @@ library
                        Bot.Config
                        Bot.Types
                        Bot.Run
+                       Bot.Slack
   build-depends:       base >= 4.7 && < 5
                      , containers
                      , unordered-containers
@@ -39,6 +40,8 @@ library
                      , stm
                      , time
                      , safe
+                     , resourcet
+                     , exceptions
   default-language:    Haskell2010
 
 executable ltshaskell-slackbot
