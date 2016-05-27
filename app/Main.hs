@@ -23,7 +23,7 @@ main = do
   url <- T.pack <$> case optsWebhookUrl opts of
     Just v -> return v
     _      -> fail "Must be set webhook url"
-  snaps <- getLtsSnapshots_ url
+  snaps <- getLtsSnapshots_ $ head defaultSnapshotsURLs
   let stmsnaps = newTVar snaps
   tids <- execSchedule $
     addJob (updateSlackCronJob stmsnaps $ sendMsg url) "* * * * *"

@@ -24,7 +24,7 @@ import           Data.HashMap.Strict  (HashMap)
 import qualified Data.HashMap.Strict  as HashMap
 import           Data.IntMap          (IntMap)
 import qualified Data.IntMap          as IntMap
-import           Data.Maybe           (fromMaybe, isJust)
+import           Data.Maybe           (catMaybes, fromMaybe, isJust)
 import           Data.Semigroup
 import           Data.Text            (Text)
 import qualified Data.Text            as T
@@ -133,6 +133,27 @@ hasLtsUpdates ups
 
 checkUpdates :: Snapshots -> Snapshots -> LtsHaskellUpdates
 checkUpdates olds news = LtsHaskellUpdates
-  Nothing
+  latestUpdate
   Nothing
   IntMap.empty
+  where
+    latestUpdate = do
+      let oldLatestLts = latestLts olds
+      let newLatestLts = latestLts news
+      if oldLatestLts /= newLatestLts
+        then Just $ LtsHaskellUpdate oldLatestLts newLatestLts
+        else Nothing
+
+    nightlyUpdate = do
+      let oldNightlyDay = snapshotsNightly olds
+      let newNightlyDay = snapshotsNightly news
+      if oldNightlyDay /= newNightlyDay
+        then Just $ NightlyHaskellUpdate oldNightlyDay newNightlyDay
+        else Nothing
+
+    ltsUpdates = IntMap.fromList $ catMaybes $ do
+      (v, newLts) <- IntMap.toList $ snapshotsLts news
+      let oldLts = fromMaybe newLts $ IntMap.lookup v $ snapshotsLts olds
+      return $ if oldLts /= newLts
+        then Just (v, LtsHaskellUpdate oldLts newLts)
+        else Nothing

@@ -9,6 +9,7 @@ import           Control.Concurrent.STM
 import           Control.Monad
 import           Control.Monad.Trans
 import           Data.Aeson
+import           Data.Maybe             (fromMaybe)
 import           Data.Text              (Text)
 import qualified Data.Text              as T
 import           Network.HTTP.Conduit
@@ -18,7 +19,7 @@ import           Bot.Message
 import           Bot.Types
 
 getLtsSnapshots :: MonadIO m => Text -> m (Maybe Snapshots)
-getLtsSnapshots url = decode <$> (simpleHttp $ T.unpack url)
+getLtsSnapshots url = decode <$> simpleHttp (T.unpack url)
 
 getLtsSnapshots_ :: MonadIO m => Text -> m Snapshots
 getLtsSnapshots_ url = do
@@ -36,7 +37,8 @@ updateSlackCronJob :: MonadIO m => STM (TVar Snapshots) -> (LtsHaskellUpdateInfo
 updateSlackCronJob stmsnaps sendMsg = do
   snaps <- liftIO $ atomically $ stmsnaps >>= readTVar
   (newsnaps, updates) <- checkLtsHaskellUpdates snaps
+  liftIO $ putStrLn $ "trace: " ++ show newsnaps
   liftIO $ atomically $ stmsnaps >>= flip writeTVar newsnaps
-  maybe (return ()) id $ do
+  fromMaybe (return ()) $ do
     info <- toLatestInfo updates
-    return $ sendMsg info
+    return $ liftIO (putStrLn "trace: sending to slack...") >> sendMsg info

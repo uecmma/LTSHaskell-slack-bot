@@ -27,7 +27,7 @@ botOptionsParser = BotOptions
   <*> snapshotsUrlP
   where
     webHookUrlP = optional
-      $  option auto
+      $  option str
       $  long "url"
       <> long "webhook-url"
       <> help "WebHook URL for Slack Incoming"
@@ -41,14 +41,14 @@ botOptionsParser = BotOptions
       <> metavar "TIME"
 
     configPathP = optional
-      $  option auto
+      $  option str
       $  short 'c'
       <> long "config"
       <> help "config file"
       <> metavar "FILE"
 
     snapshotsUrlP = optional
-      $  option auto
+      $  option str
       $  long "snapshots-url"
       <> help "snapshots url"
       <> metavar "URL"
