@@ -1,0 +1,11 @@
+build: off
+
+before_test:
+- curl -sS -ostack.zip -L --insecure http://www.stackage.org/stack/windows-i386
+- 7z x stack.zip stack.exe
+
+clone_folder: "c:\\ltshaskell-slackbot"
+
+test_script:
+- stack setup > nul
+- echo "" | stack --no-terminal test
