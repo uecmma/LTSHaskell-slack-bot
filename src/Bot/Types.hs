@@ -4,6 +4,13 @@
 module Bot.Types
   ( LtsVersion (..)
   , Snapshots (..)
+  , LtsHaskellUpdate (..)
+  , LtsHaskellUpdates (..)
+  , isLatestUpdate
+  , isNightlyUpdate
+  , hasEachLtsUpdates
+  , hasLtsUpdates
+  , checkUpdates
   ) where
 
 import           Control.Applicative
@@ -16,7 +23,7 @@ import           Data.HashMap.Strict  (HashMap)
 import qualified Data.HashMap.Strict  as HashMap
 import           Data.IntMap          (IntMap)
 import qualified Data.IntMap          as IntMap
-import           Data.Maybe           (fromMaybe)
+import           Data.Maybe           (fromMaybe, isJust)
 import           Data.Semigroup
 import           Data.Text            (Text)
 import qualified Data.Text            as T
@@ -84,3 +91,47 @@ instance ToJSON Snapshots where
     ] ++
     map (\(n, v) -> ("lts-" <> showt n) .= v)
     (IntMap.toList snapshotsLts)
+
+data NightlyHaskellUpdate = NightlyHaskellUpdate
+  { getBeforeNightlyDay :: Day
+  , getAfterNightlyDay  :: Day
+  } deriving (Eq)
+
+instance Show NightlyHaskellUpdate where
+  show (NightlyHaskellUpdate b a)
+    = "nightly-" ++ show b ++ " -> nightly-" ++ show a
+
+data LtsHaskellUpdate = LtsHaskellUpdate
+  { getBeforeVersion :: LtsVersion
+  , getAfterVersion  :: LtsVersion
+  } deriving (Eq)
+
+instance Show LtsHaskellUpdate where
+  show (LtsHaskellUpdate b a) = show b ++ " -> " ++ show a
+
+data LtsHaskellUpdates = LtsHaskellUpdates
+  { getLatestUpdate   :: !(Maybe LtsHaskellUpdate)
+  , getNightlyUpdate  :: !(Maybe NightlyHaskellUpdate)
+  , getEachLtsUpdates :: !(IntMap LtsHaskellUpdate)
+  } deriving (Show, Eq)
+
+isLatestUpdate :: LtsHaskellUpdates -> Bool
+isLatestUpdate = isJust . getLatestUpdate
+
+isNightlyUpdate :: LtsHaskellUpdates -> Bool
+isNightlyUpdate = isJust . getNightlyUpdate
+
+hasEachLtsUpdates :: LtsHaskellUpdates -> Bool
+hasEachLtsUpdates = (IntMap.empty /=) . getEachLtsUpdates
+
+hasLtsUpdates :: LtsHaskellUpdates -> Bool
+hasLtsUpdates ups
+  =  isLatestUpdate ups
+  || isNightlyUpdate ups
+  || hasEachLtsUpdates ups
+
+checkUpdates :: Snapshots -> Snapshots -> LtsHaskellUpdates
+checkUpdates olds news = LtsHaskellUpdates
+  Nothing
+  Nothing
+  IntMap.empty

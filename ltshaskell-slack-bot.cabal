@@ -20,6 +20,7 @@ library
                        Bot.Types
                        Bot.Run
                        Bot.Slack
+                       Bot.Message
   build-depends:       base >= 4.7 && < 5
                      , containers
                      , unordered-containers
