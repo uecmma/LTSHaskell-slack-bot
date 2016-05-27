@@ -66,4 +66,4 @@ test-suite ltshaskell-slack-bot-test
 
 source-repository head
   type:     git
-  location: https://github.com/mizunashi-mana/ltshaskell-slack-bot
+  location: https://github.com/uecmma/ltshaskell-slack-bot.git
