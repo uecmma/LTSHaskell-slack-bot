@@ -12,10 +12,22 @@ cd LTSHaskell-slack-bot
 stack install
 ```
 
-## Run
+## Usage
 
 ```bash
-ltshaskell-slackbot --slack-token [Your Slack Token]
+> ltshaskell-slackbot --help
+notification updating of LTSHaskell
+
+Usage: ltshaskell-slackbot [--url|--webhook-url URL] [-t|--delay-time TIME]
+                           [-c|--config FILE] [--snapshots-url URL]
+  LTSHaskell Slack Bot
+
+Available options:
+  -h,--help                Show this help text
+  --url,--webhook-url URL  WebHook URL for Slack Incoming
+  -t,--delay-time TIME     Delay time (seconds)
+  -c,--config FILE         config file
+  --snapshots-url URL      snapshots url
 ```
 
 [travis-image]: https://travis-ci.org/uecmma/LTSHaskell-slack-bot.svg?branch=master
